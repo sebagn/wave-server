@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { Paciente } from '../entities/paciente.entity';
 import { CreatePacienteDTO, UpdatePacienteDTO } from 'src/dtos/paciente.dtos';
@@ -37,7 +37,12 @@ export class PacientesService {
     return this.pacientes;
   }
   public getPacienteById(id: number) {
-    return this.pacientes.find((paciente) => paciente.id === id);
+    console.log(id);
+    const paciente = this.pacientes.find((paciente) => paciente.id === id);
+    if (!paciente) {
+      throw new NotFoundException(`Paciente with id ${id} not found`);
+    }
+    return paciente;
   }
 
   public addPaciente(paciente: CreatePacienteDTO) {
@@ -60,7 +65,7 @@ export class PacientesService {
         ...this.pacientes[pacienteIndex],
         ...updatedPaciente,
       };
-      return this.pacientes[pacienteIndex];
+      return updatedPaciente;
     }
     return null;
   }

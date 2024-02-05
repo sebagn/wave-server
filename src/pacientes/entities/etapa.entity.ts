@@ -11,5 +11,4 @@ export class Etapa {
   alineadoresInf: number;
   ipr: string[];
   attach: string[];
-  video: string;
 }

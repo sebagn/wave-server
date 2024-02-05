@@ -11,7 +11,7 @@ export class CreateEtapaDTO {
   // datos de ingreso
   @IsNotEmpty()
   @IsString()
-  readonly paciente: string;
+  readonly pacienteId: number;
 
   @IsNotEmpty()
   @IsNumber()
@@ -24,40 +24,40 @@ export class CreateEtapaDTO {
 
   @IsNotEmpty()
   @IsString()
-  readonly planTrat: string;
+  readonly planTratamiento: string;
 
   @IsNotEmpty()
   @IsUrl()
-  readonly fotos: string;
+  readonly fotos: string[];
 
   @IsNotEmpty()
   @IsUrl()
-  readonly rx: string;
+  readonly rx: string[];
 
   @IsNotEmpty()
   @IsUrl()
-  readonly escaneos: string;
+  readonly escaneos: string[];
 
   // datos de informe 02
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
-  readonly cantSup: number;
+  readonly alineadoresSup: number;
 
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
-  readonly cantInf: number;
+  readonly alineadoresInf: number;
 
   @IsNotEmpty()
   @IsUrl()
-  readonly ipr: string;
+  readonly ipr: string[];
 
   @IsNotEmpty()
   @IsUrl()
-  readonly attach: string;
+  readonly attach: string[];
 }
 
 export class UpdateEtapaDTO extends PartialType(
-  OmitType(CreateEtapaDTO, ['paciente']),
+  OmitType(CreateEtapaDTO, ['pacienteId']),
 ) {}
