@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 
-export class CreateOdontologoDTO {
+export class CreateOdontologoDto {
   @IsNotEmpty()
   @IsString()
   readonly nombre: string;
@@ -27,4 +27,4 @@ export class CreateOdontologoDTO {
   readonly mail: string;
 }
 
-export class UpdateOdontologoDTO extends PartialType(CreateOdontologoDTO) {}
+export class UpdateOdontologoDto extends PartialType(CreateOdontologoDto) {}

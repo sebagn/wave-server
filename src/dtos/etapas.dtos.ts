@@ -5,8 +5,9 @@ import {
   IsPositive,
   IsUrl,
 } from 'class-validator';
+import { PartialType, OmitType } from '@nestjs/mapped-types';
 
-export class CreatePacienteDTO {
+export class CreateEtapaDTO {
   // datos de ingreso
   @IsNotEmpty()
   @IsString()
@@ -56,3 +57,7 @@ export class CreatePacienteDTO {
   @IsUrl()
   readonly attach: string;
 }
+
+export class UpdateEtapaDTO extends PartialType(
+  OmitType(CreateEtapaDTO, ['paciente']),
+) {}
