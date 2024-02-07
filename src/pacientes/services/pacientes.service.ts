@@ -1,10 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import { Paciente } from '../entities/paciente.entity';
 import { CreatePacienteDTO, UpdatePacienteDTO } from 'src/dtos/paciente.dtos';
 
+// import config from '../../../config';
+// import { ConfigType } from '@nestjs/config';
+
 @Injectable()
 export class PacientesService {
+  constructor(
+    // private configService: ConfigService, this.configService.get('DATABASE_NAME')
+    // private databaseService: DatabaseService,
+    // private odontologosService: OdontologosService,
+    //  @Inject(config.KEY) private configService: ConfigType<typeof config>
+  ) {}
+
   private counterId = 1;
   private pacientes: Paciente[] = [
     {
