@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
 import * as Joi from 'joi';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { PacientesModule } from './pacientes/pacientes.module';
 import { OdontologosModule } from './odontologos/odontologos.module';
 import { DatabaseModule } from './database/database.module';
-
 import { environments } from './environments';
-import config from '../config';
+import config from './config';
 
 @Module({
   imports: [
@@ -17,8 +17,11 @@ import config from '../config';
       load: [config],
       isGlobal: true,
       validationSchema: Joi.object({
-        DATABASE_NAME: Joi.string().required(),
+        DATABASE_HOST: Joi.string().required(),
         DATABASE_PORT: Joi.number().required(),
+        DATABASE_USER: Joi.string().required(),
+        DATABASE_PASSWORD: Joi.string().required(),
+        DATABASE_NAME: Joi.string().required(),
       }),
     }),
     PacientesModule,

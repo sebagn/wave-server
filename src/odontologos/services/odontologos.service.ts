@@ -3,6 +3,8 @@ import { UpdateOdontologoDto } from 'src/dtos/odontologo.dtos';
 
 @Injectable()
 export class OdontologosService {
+  constructor() {}
+
   private odontologos = [
     {
       id: 1,

@@ -1,0 +1,14 @@
+version: '3.3'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: wavedb
+      MONGO_INITDB_ROOT_USERNAME: wavedev
+      MONGO_INITDB_ROOT_PASSWORD: wavedev123
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data:/data/db
