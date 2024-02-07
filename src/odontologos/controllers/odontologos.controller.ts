@@ -24,7 +24,7 @@ export class OdontologosController {
 
   @Get(':id')
   getOdontologo(@Param('id') id: string) {
-    return this.odontologosService.findOne(+id);
+    return this.odontologosService.findOne(id);
   }
 
   @Post()
@@ -37,11 +37,11 @@ export class OdontologosController {
     @Param('id') id: string,
     @Body() payload: UpdateOdontologoDto,
   ) {
-    return this.odontologosService.update(+id, payload);
+    return this.odontologosService.update(id, payload);
   }
 
   @Delete(':id')
   removeOdontologo(@Param('id') id: string) {
-    return this.odontologosService.remove(+id);
+    return this.odontologosService.remove(id);
   }
 }

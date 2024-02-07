@@ -9,20 +9,19 @@ import {
 } from '@nestjs/common';
 import { PacientesService } from '../services/pacientes.service';
 import { CreatePacienteDTO, UpdatePacienteDTO } from '../../dtos/paciente.dtos';
-import { Paciente } from '../entities/paciente.entity';
 
 @Controller('pacientes')
 export class PacientesController {
   constructor(private pacientesService: PacientesService) {}
 
   @Get()
-  getAllPacientes(): Paciente[] {
+  getAllPacientes() {
     return this.pacientesService.getPacientes();
   }
 
   @Get(':id')
-  getPacienteById(@Param('id') id: number): Paciente {
-    return this.pacientesService.getPacienteById(Number(id));
+  getPacienteById(@Param('id') id: string) {
+    return this.pacientesService.getPacienteById(id);
   }
 
   @Post()
@@ -35,12 +34,12 @@ export class PacientesController {
   }
 
   @Put(':id')
-  updatePaciente(@Param('id') id: number, @Body() changes: UpdatePacienteDTO) {
+  updatePaciente(@Param('id') id: string, @Body() changes: UpdatePacienteDTO) {
     return this.pacientesService.updatePaciente(id, changes);
   }
 
   @Delete(':id')
-  deletePaciente(@Param('id') id: number) {
+  deletePaciente(@Param('id') id: string) {
     return this.pacientesService.deletePaciente(id);
   }
 }

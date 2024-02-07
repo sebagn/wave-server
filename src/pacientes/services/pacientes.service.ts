@@ -1,54 +1,21 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
-import { Paciente } from '../entities/paciente.entity';
 import { CreatePacienteDTO, UpdatePacienteDTO } from 'src/dtos/paciente.dtos';
-
-// import config from '../../../config';
-// import { ConfigType } from '@nestjs/config';
+import { Paciente } from '../entities/paciente.entity';
 
 @Injectable()
 export class PacientesService {
   constructor(
-    // private configService: ConfigService, this.configService.get('DATABASE_NAME')
-    // private databaseService: DatabaseService,
-    // private odontologosService: OdontologosService,
-    //  @Inject(config.KEY) private configService: ConfigType<typeof config>
+    @InjectModel(Paciente.name) private pacienteModel: Model<Paciente>,
   ) {}
 
-  private counterId = 1;
-  private pacientes: Paciente[] = [
-    {
-      id: 1,
-      nombre: 'Juan',
-      apellido: 'Perez',
-      edad: 30,
-      sexo: 'Masculino',
-      odontologo: 'Carlos',
-    },
-    {
-      id: 2,
-      nombre: 'Carlos',
-      apellido: 'Lopez',
-      edad: 25,
-      sexo: 'Masculino',
-      odontologo: 'Juan',
-    },
-    {
-      id: 3,
-      nombre: 'Ana',
-      apellido: 'Gomez',
-      edad: 35,
-      sexo: 'Femenino',
-      odontologo: 'Carlos',
-    },
-  ];
-
   public getPacientes() {
-    return this.pacientes;
+    return this.pacienteModel.find().exec();
   }
-  public getPacienteById(id: number) {
-    console.log(id);
-    const paciente = this.pacientes.find((paciente) => paciente.id === id);
+  public getPacienteById(id: string) {
+    const paciente = this.pacienteModel.findById(id).exec();
     if (!paciente) {
       throw new NotFoundException(`Paciente with id ${id} not found`);
     }
@@ -56,38 +23,21 @@ export class PacientesService {
   }
 
   public addPaciente(paciente: CreatePacienteDTO) {
-    this.counterId = this.counterId + 1;
-    const newPaciente = {
-      id: this.counterId,
-      ...paciente,
-    };
-    this.pacientes.push(newPaciente);
+    const newPaciente = new this.pacienteModel(paciente);
+    return newPaciente.save();
+  }
 
+  public updatePaciente(id: string, updatedPaciente: UpdatePacienteDTO) {
+    const paciente = this.pacienteModel
+      .findByIdAndUpdate(id, { $set: updatedPaciente }, { new: true })
+      .exec();
+    if (!paciente) {
+      throw new NotFoundException(`Paciente with id ${id} not found`);
+    }
     return paciente;
   }
 
-  public updatePaciente(id: number, updatedPaciente: UpdatePacienteDTO) {
-    const pacienteIndex = this.pacientes.findIndex(
-      (paciente) => paciente.id === id,
-    );
-    if (pacienteIndex !== -1) {
-      this.pacientes[pacienteIndex] = {
-        ...this.pacientes[pacienteIndex],
-        ...updatedPaciente,
-      };
-      return updatedPaciente;
-    }
-    return null;
-  }
-
-  public deletePaciente(id: number) {
-    const pacienteIndex = this.pacientes.findIndex(
-      (paciente) => paciente.id === id,
-    );
-    if (pacienteIndex !== -1) {
-      const deletedPaciente = this.pacientes.splice(pacienteIndex, 1)[0];
-      return deletedPaciente;
-    }
-    return null;
+  public deletePaciente(id: string) {
+    return this.pacienteModel.findByIdAndDelete(id).exec();
   }
 }

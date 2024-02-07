@@ -1,50 +1,44 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
 import { UpdateOdontologoDto } from 'src/dtos/odontologo.dtos';
+import { Odontologo } from '../entities/odontologo.entity';
 
 @Injectable()
 export class OdontologosService {
-  constructor() {}
-
-  private odontologos = [
-    {
-      id: 1,
-      nombre: 'Juan',
-      apellido: 'Perez',
-      matricula: '1234',
-    },
-    {
-      id: 2,
-      nombre: 'Carlos',
-      apellido: 'Lopez',
-      matricula: '5678',
-    },
-  ];
+  constructor(
+    @InjectModel(Odontologo.name) private odontologoModel: Model<Odontologo>,
+  ) {}
 
   public findAll() {
-    return this.odontologos;
+    return this.odontologoModel.find().exec();
   }
 
-  public findOne(id: number) {
-    return this.odontologos.find((odontologo) => odontologo.id === id);
-  }
-
-  public create(odontologo: any) {
-    this.odontologos.push(odontologo);
+  public findOne(id: string) {
+    const odontologo = this.odontologoModel.findById(id).exec();
+    if (!odontologo) {
+      throw new NotFoundException('Odontologo not found');
+    }
     return odontologo;
   }
 
-  public update(id: number, changes: UpdateOdontologoDto) {
-    const index = this.odontologos.findIndex((o) => o.id === id);
-    if (!index) {
-      throw new NotFoundException('Odontologo not found');
-    }
-    this.odontologos[index] = { ...this.odontologos[index], ...changes };
-    return this.odontologos[index];
+  public create(odontologo: any) {
+    const newOdontologo = new this.odontologoModel(odontologo);
+    return newOdontologo.save();
   }
 
-  public remove(id: number) {
-    const index = this.odontologos.findIndex((o) => o.id === id);
-    this.odontologos.splice(index, 1);
-    return { id };
+  public update(id: string, changes: UpdateOdontologoDto) {
+    const odontologo = this.odontologoModel
+      .findByIdAndUpdate(id, { $set: changes }, { new: true })
+      .exec();
+    if (!odontologo) {
+      throw new NotFoundException('Odontologo not found');
+    }
+    return odontologo;
+  }
+
+  public remove(id: string) {
+    return this.odontologoModel.findByIdAndDelete(id).exec();
   }
 }
