@@ -12,6 +12,7 @@ import {
   CreateOdontologoDto,
   UpdateOdontologoDto,
 } from '../../dtos/odontologo.dtos';
+import { MongoIdPipe } from 'src/common/mongo-id/mongo-id.pipe';
 
 @Controller('odontologos')
 export class OdontologosController {
@@ -23,7 +24,7 @@ export class OdontologosController {
   }
 
   @Get(':id')
-  getOdontologo(@Param('id') id: string) {
+  getOdontologo(@Param('id', MongoIdPipe) id: string) {
     return this.odontologosService.findOne(id);
   }
 
@@ -34,14 +35,14 @@ export class OdontologosController {
 
   @Put(':id')
   updateOdontologo(
-    @Param('id') id: string,
+    @Param('id', MongoIdPipe) id: string,
     @Body() payload: UpdateOdontologoDto,
   ) {
     return this.odontologosService.update(id, payload);
   }
 
   @Delete(':id')
-  removeOdontologo(@Param('id') id: string) {
+  removeOdontologo(@Param('id', MongoIdPipe) id: string) {
     return this.odontologosService.remove(id);
   }
 }
