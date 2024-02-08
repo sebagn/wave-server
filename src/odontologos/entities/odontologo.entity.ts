@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { Paciente } from 'src/pacientes/entities/paciente.entity';
 
 @Schema()
 export class Odontologo extends Document {
@@ -9,10 +10,10 @@ export class Odontologo extends Document {
   @Prop({ required: true })
   apellido: string;
 
-  @Prop()
+  @Prop({ required: true })
   matricula: string;
 
-  @Prop()
+  @Prop({ required: true })
   ciudad: string;
 
   @Prop()
@@ -23,6 +24,9 @@ export class Odontologo extends Document {
 
   @Prop()
   mail: string;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: Paciente.name }] })
+  pacientes: Types.Array<Paciente>;
 }
 
 export const OdontologoSchema = SchemaFactory.createForClass(Odontologo);

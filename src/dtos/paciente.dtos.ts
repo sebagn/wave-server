@@ -1,10 +1,17 @@
-import { IsNotEmpty, IsNumber, IsString, IsPositive } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsPositive,
+  IsOptional,
+} from 'class-validator';
 import { PartialType } from '@nestjs/mapped-types';
 
 export class CreatePacienteDTO {
   @IsNotEmpty()
-  @IsString()
-  readonly odontologo: string;
+  @IsNumber()
+  @IsPositive()
+  readonly codigo: number;
 
   @IsNotEmpty()
   @IsString()
@@ -17,11 +24,20 @@ export class CreatePacienteDTO {
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
+  readonly dni: number;
+
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
   readonly edad: number;
+
+  @IsOptional()
+  @IsString()
+  readonly sexo: string;
 
   @IsNotEmpty()
   @IsString()
-  readonly sexo: string;
+  readonly odontologo: string;
 }
 
 export class UpdatePacienteDTO extends PartialType(CreatePacienteDTO) {}

@@ -1,7 +1,11 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-import { PartialType } from '@nestjs/mapped-types';
+import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 
 export class CreateOdontologoDto {
+  @IsNotEmpty()
+  @IsString()
+  readonly matricula: string;
+
   @IsNotEmpty()
   @IsString()
   readonly nombre: string;
@@ -25,6 +29,11 @@ export class CreateOdontologoDto {
   @IsNotEmpty()
   @IsString()
   readonly mail: string;
+
+  @IsArray()
+  readonly pacientes: string[];
 }
 
-export class UpdateOdontologoDto extends PartialType(CreateOdontologoDto) {}
+export class UpdateOdontologoDto extends PartialType(
+  OmitType(CreateOdontologoDto, ['pacientes']),
+) {}

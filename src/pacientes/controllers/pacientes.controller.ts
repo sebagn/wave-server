@@ -27,11 +27,7 @@ export class PacientesController {
 
   @Post()
   createPaciente(@Body() payload: CreatePacienteDTO) {
-    const paciente = {
-      id: 0,
-      ...payload,
-    };
-    return this.pacientesService.addPaciente(paciente);
+    return this.pacientesService.addPaciente(payload);
   }
 
   @Put(':id')
