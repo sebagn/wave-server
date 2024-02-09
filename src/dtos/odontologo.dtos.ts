@@ -37,3 +37,9 @@ export class CreateOdontologoDto {
 export class UpdateOdontologoDto extends PartialType(
   OmitType(CreateOdontologoDto, ['pacientes']),
 ) {}
+
+export class AddPacientesToOdontologoDto {
+  @IsNotEmpty()
+  @IsArray()
+  readonly pacientesIds: string[];
+}

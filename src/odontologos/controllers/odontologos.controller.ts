@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { OdontologosService } from '../services/odontologos.service';
 import {
+  AddPacientesToOdontologoDto,
   CreateOdontologoDto,
   UpdateOdontologoDto,
 } from '../../dtos/odontologo.dtos';
@@ -19,30 +20,46 @@ export class OdontologosController {
   constructor(private readonly odontologosService: OdontologosService) {}
 
   @Get()
-  getOdontologos() {
+  get() {
     return this.odontologosService.findAll();
   }
 
   @Get(':id')
-  getOdontologo(@Param('id', MongoIdPipe) id: string) {
+  getOne(@Param('id', MongoIdPipe) id: string) {
     return this.odontologosService.findOne(id);
   }
 
   @Post()
-  createOdontologo(@Body() payload: CreateOdontologoDto) {
+  create(@Body() payload: CreateOdontologoDto) {
     return this.odontologosService.create(payload);
   }
 
   @Put(':id')
-  updateOdontologo(
+  update(
     @Param('id', MongoIdPipe) id: string,
     @Body() payload: UpdateOdontologoDto,
   ) {
     return this.odontologosService.update(id, payload);
   }
 
+  @Put(':id/pacientes')
+  updatePaciente(
+    @Param('id', MongoIdPipe) id: string,
+    @Body() payload: AddPacientesToOdontologoDto,
+  ) {
+    return this.odontologosService.addPaciente(id, payload.pacientesIds);
+  }
+
   @Delete(':id')
-  removeOdontologo(@Param('id', MongoIdPipe) id: string) {
+  remove(@Param('id', MongoIdPipe) id: string) {
     return this.odontologosService.remove(id);
+  }
+
+  @Delete(':id/pacientes/:pacienteId')
+  removePaciente(
+    @Param('id', MongoIdPipe) id: string,
+    @Param('pacienteId', MongoIdPipe) pacienteId: string,
+  ) {
+    return this.odontologosService.removePaciente(id, pacienteId);
   }
 }
