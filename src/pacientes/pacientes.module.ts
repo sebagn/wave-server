@@ -6,6 +6,8 @@ import { EtapasService } from './services/etapas.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Paciente, PacienteSchema } from './entities/paciente.entity';
 import { Etapa, EtapaSchema } from './entities/etapa.entity';
+import { StorageService } from 'src/storage/services/storage.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -13,8 +15,9 @@ import { Etapa, EtapaSchema } from './entities/etapa.entity';
       { name: Paciente.name, schema: PacienteSchema },
       { name: Etapa.name, schema: EtapaSchema },
     ]),
+    ConfigModule,
   ],
   controllers: [PacientesController, EtapasController],
-  providers: [PacientesService, EtapasService],
+  providers: [PacientesService, EtapasService, StorageService],
 })
 export class PacientesModule {}

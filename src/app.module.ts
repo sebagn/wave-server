@@ -8,6 +8,7 @@ import { PacientesModule } from './pacientes/pacientes.module';
 import { OdontologosModule } from './odontologos/odontologos.module';
 import { DatabaseModule } from './database/database.module';
 import { environments } from './environments';
+import { StorageModule } from './storage/storage.module';
 import config from './config';
 
 @Module({
@@ -27,6 +28,7 @@ import config from './config';
     PacientesModule,
     OdontologosModule,
     DatabaseModule,
+    StorageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

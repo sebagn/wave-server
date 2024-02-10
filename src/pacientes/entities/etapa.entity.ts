@@ -23,6 +23,8 @@ export class Etapa extends Document {
   ipr: string[];
   @Prop()
   attach: string[];
+  @Prop()
+  video: string;
 }
 
 export const EtapaSchema = SchemaFactory.createForClass(Etapa);

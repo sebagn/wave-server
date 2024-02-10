@@ -11,4 +11,10 @@ export default registerAs('config', () => ({
   auth: {
     secret: process.env.AUTH_SECRET,
   },
+  storage: {
+    awsRegion: process.env.AWS_REGION,
+    awsBucketName: process.env.AWS_BUCKET_NAME,
+    awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
 }));

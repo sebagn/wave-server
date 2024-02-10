@@ -4,40 +4,35 @@ import {
   IsString,
   IsPositive,
   IsUrl,
+  IsOptional,
 } from 'class-validator';
 import { PartialType, OmitType } from '@nestjs/mapped-types';
 
 export class CreateEtapaDTO {
   // datos de ingreso
   @IsNotEmpty()
-  @IsString()
-  readonly pacienteId: number;
+  @IsNumber()
+  readonly codPaciente: number;
 
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
   readonly numeroEtapa: number;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
   readonly diagnostico: string;
 
+  @IsOptional()
   @IsNotEmpty()
   @IsString()
-  readonly planTratamiento: string;
+  readonly tratamiento: string;
+}
 
-  @IsNotEmpty()
-  @IsUrl()
-  readonly fotos: string[];
-
-  @IsNotEmpty()
-  @IsUrl()
-  readonly rx: string[];
-
-  @IsNotEmpty()
-  @IsUrl()
-  readonly escaneos: string[];
-
+export class UpdateEtapaDTO extends PartialType(
+  OmitType(CreateEtapaDTO, ['codPaciente'] as const),
+) {
   // datos de informe 02
   @IsNotEmpty()
   @IsNumber()
@@ -48,16 +43,10 @@ export class CreateEtapaDTO {
   @IsNumber()
   @IsPositive()
   readonly alineadoresInf: number;
-
-  @IsNotEmpty()
-  @IsUrl()
-  readonly ipr: string[];
-
-  @IsNotEmpty()
-  @IsUrl()
-  readonly attach: string[];
 }
 
-export class UpdateEtapaDTO extends PartialType(
-  OmitType(CreateEtapaDTO, ['pacienteId']),
-) {}
+export class AddFileDTO {
+  @IsNotEmpty()
+  @IsUrl()
+  readonly url: string;
+}

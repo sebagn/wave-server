@@ -9,11 +9,11 @@ import { CreateEtapaDTO, UpdateEtapaDTO } from '../../dtos/etapa.dtos';
 export class EtapasService {
   constructor(@InjectModel(Etapa.name) private etapaModel: Model<Etapa>) {}
 
-  public getEtapas() {
+  async findAll() {
     return this.etapaModel.find().exec();
   }
 
-  public getEtapaById(id: string) {
+  async findOne(id: string) {
     const etapa = this.etapaModel.findById(id).exec();
     if (!etapa) {
       throw new NotFoundException(`Etapa with id ${id} not found`);
@@ -21,12 +21,12 @@ export class EtapasService {
     return etapa;
   }
 
-  public addEtapa(etapa: CreateEtapaDTO) {
+  async create(etapa: CreateEtapaDTO) {
     const newEtapa = new this.etapaModel(etapa);
     return newEtapa.save();
   }
 
-  public updateEtapa(id: string, updatedEtapa: UpdateEtapaDTO) {
+  async update(id: string, updatedEtapa: UpdateEtapaDTO) {
     const etapa = this.etapaModel
       .findByIdAndUpdate(id, { $set: updatedEtapa }, { new: true })
       .exec();
@@ -36,7 +36,16 @@ export class EtapasService {
     return etapa;
   }
 
-  public deleteEtapa(id: string) {
+  async addFile(id: string, type: string, url: string) {
+    const etapa = await this.etapaModel.findById(id).exec();
+    if (!etapa) {
+      throw new NotFoundException(`Etapa with id ${id} not found`);
+    }
+    await etapa[type].push(url);
+    return etapa.save();
+  }
+
+  async delete(id: string) {
     return this.etapaModel.findByIdAndDelete(id).exec();
   }
 }
