@@ -18,23 +18,20 @@ export class StorageService {
     private readonly configService: ConfigService<typeof config>,
   ) {}
 
-  async isImageFile(file: Express.Multer.File) {
-    const allowedTypes = ['image/jpg', 'image/jpeg', 'image/png'];
-    if (!allowedTypes.includes(file.mimetype)) {
-      throw new BadRequestException('File type is not an image');
-    }
-  }
-
   async upload(file: Express.Multer.File) {
+    if (!file) {
+      throw new BadRequestException('File is required');
+    }
+    file.originalname = file.originalname.replace(/ /g, '_');
+
     const command = new PutObjectCommand({
       Bucket: config().storage.awsBucketName,
       Key: file.originalname,
       Body: file.buffer,
-      ACL: 'public-read',
+      ACL: 'bucket-owner-full-control',
     });
     const url = `https://${config().storage.awsBucketName}.s3.amazonaws.com/${file.originalname}`;
-    const result = await this.client.send(command);
-    console.log('result', result);
+    await this.client.send(command);
 
     return { url, key: file.originalname };
   }
