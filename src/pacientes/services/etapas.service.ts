@@ -37,11 +37,8 @@ export class EtapasService {
   }
 
   async addFile(id: string, type: string, url: string) {
-    const etapa = await this.etapaModel.findById(id).exec();
-    if (!etapa) {
-      throw new NotFoundException(`Etapa with id ${id} not found`);
-    }
-    await etapa[type].push(url);
+    const etapa = await this.findOne(id);
+    await etapa[type].addToSet(url);
     return etapa.save();
   }
 

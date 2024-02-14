@@ -8,7 +8,11 @@ import {
   Put,
 } from '@nestjs/common';
 import { PacientesService } from '../services/pacientes.service';
-import { CreatePacienteDTO, UpdatePacienteDTO } from '../../dtos/paciente.dtos';
+import {
+  CreatePacienteDTO,
+  UpdatePacienteDTO,
+  AddEtapasToPacienteDTO,
+} from '../../dtos/paciente.dtos';
 import { MongoIdPipe } from 'src/common/mongo-id/mongo-id.pipe';
 
 @Controller('pacientes')
@@ -17,12 +21,12 @@ export class PacientesController {
 
   @Get()
   getAllPacientes() {
-    return this.pacientesService.getPacientes();
+    return this.pacientesService.findAll();
   }
 
   @Get(':id')
   getPacienteById(@Param('id', MongoIdPipe) id: string) {
-    return this.pacientesService.getPacienteById(id);
+    return this.pacientesService.findOne(id);
   }
 
   @Post()
@@ -36,6 +40,25 @@ export class PacientesController {
     @Body() changes: UpdatePacienteDTO,
   ) {
     return this.pacientesService.updatePaciente(id, changes);
+  }
+
+  @Put(':pacienteId/etapas/:etapaId')
+  addEtapaToPaciente(
+    @Param('pacienteId', MongoIdPipe) pacienteId: string,
+    @Body() payload: AddEtapasToPacienteDTO,
+  ) {
+    return this.pacientesService.addEtapaToPaciente(
+      pacienteId,
+      payload.etapasId,
+    );
+  }
+
+  @Delete(':pacienteId/etapas/:etapaId')
+  removeEtapaFromPaciente(
+    @Param('pacienteId', MongoIdPipe) pacienteId: string,
+    @Param('etapaId', MongoIdPipe) etapaId: string,
+  ) {
+    return this.pacientesService.removeEtapaFromPaciente(pacienteId, etapaId);
   }
 
   @Delete(':id')

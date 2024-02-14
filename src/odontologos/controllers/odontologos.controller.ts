@@ -43,11 +43,19 @@ export class OdontologosController {
   }
 
   @Put(':id/pacientes')
-  updatePaciente(
+  addPaciente(
     @Param('id', MongoIdPipe) id: string,
     @Body() payload: AddPacientesToOdontologoDto,
   ) {
     return this.odontologosService.addPaciente(id, payload.pacientesIds);
+  }
+
+  @Put(':id/pacientes/:pacienteId')
+  removePacienteFromOdontologo(
+    @Param('id', MongoIdPipe) id: string,
+    @Param('pacienteId', MongoIdPipe) pacienteId: string,
+  ) {
+    return this.odontologosService.removePaciente(id, pacienteId);
   }
 
   @Delete(':id')

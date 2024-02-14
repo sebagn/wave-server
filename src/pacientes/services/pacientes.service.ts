@@ -11,23 +11,23 @@ export class PacientesService {
     @InjectModel(Paciente.name) private pacienteModel: Model<Paciente>,
   ) {}
 
-  public getPacientes() {
+  async findAll() {
     return this.pacienteModel.find().exec();
   }
-  public getPacienteById(id: string) {
-    const paciente = this.pacienteModel.findById(id).exec();
+  async findOne(id: string) {
+    const paciente = this.pacienteModel.findById(id).populate('etapas').exec();
     if (!paciente) {
       throw new NotFoundException(`Paciente with id ${id} not found`);
     }
     return paciente;
   }
 
-  public addPaciente(paciente: CreatePacienteDTO) {
+  async addPaciente(paciente: CreatePacienteDTO) {
     const newPaciente = new this.pacienteModel(paciente);
     return newPaciente.save();
   }
 
-  public updatePaciente(id: string, updatedPaciente: UpdatePacienteDTO) {
+  async updatePaciente(id: string, updatedPaciente: UpdatePacienteDTO) {
     const paciente = this.pacienteModel
       .findByIdAndUpdate(id, { $set: updatedPaciente }, { new: true })
       .exec();
@@ -37,7 +37,19 @@ export class PacientesService {
     return paciente;
   }
 
-  public deletePaciente(id: string) {
+  async addEtapaToPaciente(pacienteId: string, etapaId: string) {
+    const paciente = await this.findOne(pacienteId);
+    paciente.etapas.addToSet(etapaId);
+    return paciente.save();
+  }
+
+  async removeEtapaFromPaciente(pacienteId: string, etapaId: string) {
+    const paciente = await this.findOne(pacienteId);
+    paciente.etapas.pull(etapaId);
+    return paciente.save();
+  }
+
+  async deletePaciente(id: string) {
     return this.pacienteModel.findByIdAndDelete(id).exec();
   }
 }

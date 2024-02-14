@@ -4,8 +4,9 @@ import {
   IsString,
   IsPositive,
   IsOptional,
+  IsArray,
 } from 'class-validator';
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType, OmitType } from '@nestjs/mapped-types';
 
 export class CreatePacienteDTO {
   @IsNotEmpty()
@@ -38,6 +39,19 @@ export class CreatePacienteDTO {
   @IsNotEmpty()
   @IsString()
   readonly odontologo: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsArray()
+  readonly etapas: string[];
 }
 
-export class UpdatePacienteDTO extends PartialType(CreatePacienteDTO) {}
+export class UpdatePacienteDTO extends PartialType(
+  OmitType(CreatePacienteDTO, ['codigo', 'etapas']),
+) {}
+
+export class AddEtapasToPacienteDTO {
+  @IsNotEmpty()
+  @IsString()
+  readonly etapasId: string;
+}

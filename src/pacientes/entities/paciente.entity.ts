@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Odontologo } from 'src/odontologos/entities/odontologo.entity';
+import { Etapa } from './etapa.entity';
 
 @Schema()
 export class Paciente extends Document {
@@ -21,5 +21,8 @@ export class Paciente extends Document {
 
   @Prop()
   sexo: string;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Etapa' }] })
+  etapas: Types.Array<Etapa>;
 }
 export const PacienteSchema = SchemaFactory.createForClass(Paciente);
