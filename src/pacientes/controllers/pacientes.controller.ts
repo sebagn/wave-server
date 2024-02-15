@@ -42,7 +42,7 @@ export class PacientesController {
     return this.pacientesService.updatePaciente(id, changes);
   }
 
-  @Put(':pacienteId/etapas/:etapaId')
+  @Put(':pacienteId/etapas')
   addEtapaToPaciente(
     @Param('pacienteId', MongoIdPipe) pacienteId: string,
     @Body() payload: AddEtapasToPacienteDTO,
@@ -53,7 +53,7 @@ export class PacientesController {
     );
   }
 
-  @Delete(':pacienteId/etapas/:etapaId')
+  @Put(':pacienteId/etapas/:etapaId')
   removeEtapaFromPaciente(
     @Param('pacienteId', MongoIdPipe) pacienteId: string,
     @Param('etapaId', MongoIdPipe) etapaId: string,

@@ -10,11 +10,11 @@ export class EtapasService {
   constructor(@InjectModel(Etapa.name) private etapaModel: Model<Etapa>) {}
 
   async findAll() {
-    return this.etapaModel.find().exec();
+    return await this.etapaModel.find().exec();
   }
 
   async findOne(id: string) {
-    const etapa = this.etapaModel.findById(id).exec();
+    const etapa = await this.etapaModel.findById(id).exec();
     if (!etapa) {
       throw new NotFoundException(`Etapa with id ${id} not found`);
     }
@@ -23,11 +23,11 @@ export class EtapasService {
 
   async create(etapa: CreateEtapaDTO) {
     const newEtapa = new this.etapaModel(etapa);
-    return newEtapa.save();
+    return await newEtapa.save();
   }
 
   async update(id: string, updatedEtapa: UpdateEtapaDTO) {
-    const etapa = this.etapaModel
+    const etapa = await this.etapaModel
       .findByIdAndUpdate(id, { $set: updatedEtapa }, { new: true })
       .exec();
     if (!etapa) {
@@ -43,6 +43,6 @@ export class EtapasService {
   }
 
   async delete(id: string) {
-    return this.etapaModel.findByIdAndDelete(id).exec();
+    return await this.etapaModel.findByIdAndDelete(id).exec();
   }
 }

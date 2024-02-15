@@ -4,7 +4,7 @@ import { Etapa } from './etapa.entity';
 
 @Schema()
 export class Paciente extends Document {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   codigo: number;
 
   @Prop({ required: true })
@@ -22,7 +22,7 @@ export class Paciente extends Document {
   @Prop()
   sexo: string;
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Etapa' }] })
+  @Prop({ type: [{ type: Types.ObjectId, ref: Etapa.name }] })
   etapas: Types.Array<Etapa>;
 }
 export const PacienteSchema = SchemaFactory.createForClass(Paciente);

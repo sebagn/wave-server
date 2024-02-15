@@ -36,10 +36,6 @@ export class CreatePacienteDTO {
   @IsString()
   readonly sexo: string;
 
-  @IsNotEmpty()
-  @IsString()
-  readonly odontologo: string;
-
   @IsOptional()
   @IsNotEmpty()
   @IsArray()
@@ -52,6 +48,6 @@ export class UpdatePacienteDTO extends PartialType(
 
 export class AddEtapasToPacienteDTO {
   @IsNotEmpty()
-  @IsString()
-  readonly etapasId: string;
+  @IsArray()
+  readonly etapasId: string[];
 }

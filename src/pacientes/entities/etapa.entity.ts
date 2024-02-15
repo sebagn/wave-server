@@ -22,7 +22,7 @@ export class Etapa extends Document {
   @Prop()
   ipr: string[];
   @Prop()
-  attach: string[];
+  attaches: string[];
   @Prop()
   video: string;
 }

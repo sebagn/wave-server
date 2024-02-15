@@ -1,12 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 
 import {
   CreateOdontologoDto,
   UpdateOdontologoDto,
 } from 'src/dtos/odontologo.dtos';
 import { Odontologo } from '../entities/odontologo.entity';
+import { Paciente } from 'src/pacientes/entities/paciente.entity';
 
 @Injectable()
 export class OdontologosService {
@@ -15,11 +16,21 @@ export class OdontologosService {
   ) {}
 
   async findAll() {
-    return await this.odontologoModel.find().exec();
+    return await this.odontologoModel
+      .find()
+      .populate({
+        path: 'pacientes',
+        model: Paciente.name,
+        select: 'nombre apellido',
+      })
+      .exec();
   }
 
   async findOne(id: string) {
-    const odontologo = await this.odontologoModel.findById(id).exec();
+    const odontologo = await this.odontologoModel
+      .findById(id)
+      .populate({ path: 'pacientes', model: Paciente.name })
+      .exec();
     if (!odontologo) {
       throw new NotFoundException('Odontologo no se ha encontrado');
     }
@@ -46,16 +57,18 @@ export class OdontologosService {
   }
 
   async addPaciente(id: string, pacienteId: string[]) {
-    const odontologo = await this.findOne(id);
+    const odontologo = await this.odontologoModel.findById(id).exec();
     pacienteId.forEach((id) => {
-      odontologo.pacientes.addToSet(id);
+      const pacienteid = new mongoose.Types.ObjectId(id);
+      odontologo.pacientes.addToSet(pacienteid);
     });
-    return odontologo.save();
+    return await odontologo.save();
   }
 
   async removePaciente(id: string, pacienteId: string) {
     const odontologo = await this.odontologoModel.findById(id).exec();
-    odontologo.pacientes.pull(pacienteId);
+    const pacienteid = new mongoose.Types.ObjectId(pacienteId);
+    odontologo.pacientes.pull(pacienteid);
     return odontologo.save();
   }
 }
