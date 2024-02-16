@@ -20,6 +20,8 @@ export class Etapa extends Document {
   @Prop()
   alineadoresInf: number;
   @Prop()
+  observaciones: string;
+  @Prop()
   ipr: string[];
   @Prop()
   attaches: string[];

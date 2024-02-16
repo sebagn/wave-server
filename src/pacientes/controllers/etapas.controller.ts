@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { EtapasService } from '../services/etapas.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { CreateEtapaDTO } from 'src/dtos/etapa.dtos';
+import { CreateEtapaDTO, UpdateEtapaDTO } from 'src/dtos/etapa.dtos';
 import { MongoIdPipe } from 'src/common/mongo-id/mongo-id.pipe';
 import { StorageService } from 'src/storage/services/storage.service';
 import { ImageValidationPipe } from 'src/common/file-validation/image.pipe';
@@ -28,13 +28,29 @@ export class EtapasController {
   }
 
   @Get(':id')
-  getOne(@Param('id', MongoIdPipe) id: string) {
-    return this.etapasService.findOne(id);
+  async getOne(@Param('id', MongoIdPipe) id: string) {
+    const etapa = await this.etapasService.findOne(id);
+    etapa.escaneos = await Promise.all(await this.storageService.getObject(etapa.escaneos));
+    etapa.fotos = await Promise.all(await this.storageService.getObject(etapa.fotos));
+    etapa.rx = await Promise.all(await this.storageService.getObject(etapa.rx));
+    etapa.ipr = await Promise.all(await this.storageService.getObject(etapa.ipr));
+    etapa.attaches = await Promise.all(await this.storageService.getObject(etapa.attaches));
+    return {
+      etapa,
+    };
   }
 
   @Post()
   create(@Body() payload: CreateEtapaDTO) {
     return this.etapasService.create(payload);
+  }
+
+  @Put(':id')
+  update(
+    @Param('id', MongoIdPipe) id: string,
+    @Body() payload: UpdateEtapaDTO,
+  ) {
+    return this.etapasService.update(id, payload);
   }
 
   @Put(':id/escaneos')
@@ -44,7 +60,7 @@ export class EtapasController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     const result = await this.storageService.upload(file);
-    const etapa = await this.etapasService.addFile(id, 'escaneos', result.url);
+    const etapa = await this.etapasService.addFile(id, 'escaneos', result.key);
     return etapa;
   }
 
@@ -56,7 +72,7 @@ export class EtapasController {
     @UploadedFile(ImageValidationPipe) file: Express.Multer.File,
   ) {
     const result = await this.storageService.upload(file);
-    const etapa = await this.etapasService.addFile(id, type, result.url);
+    const etapa = await this.etapasService.addFile(id, type, result.key);
     return etapa;
   }
 }

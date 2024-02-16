@@ -36,9 +36,9 @@ export class EtapasService {
     return etapa;
   }
 
-  async addFile(id: string, type: string, url: string) {
+  async addFile(id: string, type: string, key: string) {
     const etapa = await this.findOne(id);
-    await etapa[type].addToSet(url);
+    await etapa[type].addToSet(key);
     return etapa.save();
   }
 
