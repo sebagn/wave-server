@@ -26,7 +26,11 @@ export class PacientesService {
   async findOne(id: string) {
     const paciente = await this.pacienteModel
       .findById(id)
-      .populate({ path: 'etapas', model: Etapa.name })
+      .populate({
+        path: 'etapas',
+        model: Etapa.name,
+        select: '_id numeroEtapa',
+      })
       .exec();
     if (!paciente) {
       throw new NotFoundException(`Paciente with id ${id} not found`);

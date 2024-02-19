@@ -21,7 +21,7 @@ export class OdontologosService {
       .populate({
         path: 'pacientes',
         model: Paciente.name,
-        select: 'nombre apellido',
+        select: '_id nombre apellido',
       })
       .exec();
   }

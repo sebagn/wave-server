@@ -27,7 +27,7 @@ export class EtapasController {
     return this.etapasService.findAll();
   }
 
-  @Get(':id')
+  @Get(':id') // REFACTOR THIS
   async getOne(@Param('id', MongoIdPipe) id: string) {
     const etapa = await this.etapasService.findOne(id);
     etapa.escaneos = await Promise.all(await this.storageService.getObject(etapa.escaneos));
@@ -35,9 +35,7 @@ export class EtapasController {
     etapa.rx = await Promise.all(await this.storageService.getObject(etapa.rx));
     etapa.ipr = await Promise.all(await this.storageService.getObject(etapa.ipr));
     etapa.attaches = await Promise.all(await this.storageService.getObject(etapa.attaches));
-    return {
-      etapa,
-    };
+    return etapa;
   }
 
   @Post()
