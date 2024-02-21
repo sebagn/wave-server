@@ -10,11 +10,6 @@ import { PartialType, OmitType } from '@nestjs/mapped-types';
 
 export class CreatePacienteDTO {
   @IsNotEmpty()
-  @IsNumber()
-  @IsPositive()
-  readonly codigo: number;
-
-  @IsNotEmpty()
   @IsString()
   readonly nombre: string;
 
@@ -37,13 +32,17 @@ export class CreatePacienteDTO {
   readonly sexo: string;
 
   @IsOptional()
+  @IsString()
+  readonly estado: string;
+
+  @IsOptional()
   @IsNotEmpty()
   @IsArray()
   readonly etapas: string[];
 }
 
 export class UpdatePacienteDTO extends PartialType(
-  OmitType(CreatePacienteDTO, ['codigo', 'etapas']),
+  OmitType(CreatePacienteDTO, ['etapas']),
 ) {}
 
 export class AddEtapasToPacienteDTO {

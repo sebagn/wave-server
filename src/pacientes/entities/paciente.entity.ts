@@ -4,9 +4,6 @@ import { Etapa } from './etapa.entity';
 
 @Schema({ timestamps: true })
 export class Paciente extends Document {
-  @Prop({ required: true, unique: true })
-  codigo: number;
-
   @Prop({ required: true })
   nombre: string;
 

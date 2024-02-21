@@ -6,7 +6,7 @@ import {
   IsUrl,
   IsOptional,
 } from 'class-validator';
-import { PartialType, OmitType } from '@nestjs/mapped-types';
+import { PartialType } from '@nestjs/mapped-types';
 
 export class CreateEtapaDTO {
   @IsNotEmpty()
@@ -27,12 +27,12 @@ export class CreateEtapaDTO {
 
 export class UpdateEtapaDTO extends PartialType(CreateEtapaDTO) {
   // datos de informe 02
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   @IsPositive()
   readonly alineadoresSup: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   @IsPositive()
   readonly alineadoresInf: number;

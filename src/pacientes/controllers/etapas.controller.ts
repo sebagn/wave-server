@@ -67,8 +67,9 @@ export class EtapasController {
   async addImage(
     @Param('id', MongoIdPipe) id: string,
     @Param('type') type: string,
-    @UploadedFile(ImageValidationPipe) file: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File,
   ) {
+    console.log(file);
     const result = await this.storageService.upload(file);
     const etapa = await this.etapasService.addFile(id, type, result.key);
     return etapa;
