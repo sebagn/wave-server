@@ -54,7 +54,6 @@ export class PacientesService {
   }
 
   async addEtapaToPaciente(pacienteId: string, etapasId: string[]) {
-    console.log(pacienteId, etapasId)
     const paciente = await this.pacienteModel.findById(pacienteId);
     if (!paciente) {
       throw new NotFoundException(`Paciente with id ${pacienteId} not found`);

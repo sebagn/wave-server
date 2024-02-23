@@ -9,7 +9,8 @@ import config from 'src/config';
     MongooseModule.forRootAsync({
       useFactory: (configService: ConfigType<typeof config>) => {
         const { dbName, port, password, host, user } = configService.database;
-        const uri = `mongodb://${host}:${port}`;
+        const uri = `mongodb+srv://${user}:${password}@${dbName}.zicsgzf.mongodb.net/?retryWrites=true&w=majority&appName=${dbName}`;
+        // const uri = `mongodb://${host}:${port}`;
 
         return {
           uri,
