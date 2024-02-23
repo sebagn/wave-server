@@ -8,9 +8,6 @@ export default registerAs('config', () => ({
     password: process.env.DATABASE_PASSWORD,
     host: process.env.DATABASE_HOST,
   },
-  auth: {
-    secret: process.env.AUTH_SECRET,
-  },
   storage: {
     awsRegion: process.env.AWS_REGION,
     awsBucketName: process.env.AWS_BUCKET_NAME,
